@@ -1,0 +1,27 @@
+**/node_modules/
+
+**/dist/
+**/build/
+**/*.tsbuildinfo
+
+**/.env
+**/.env.*  # for .env.local, .env.production, etc.
+
+**/*.log
+logs/
+
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+.DS_Store
+Thumbs.db
+
+.vscode/
+.idea/
+*.swp
+
+coverage/
+**/coverage/
+*.lcov
+
