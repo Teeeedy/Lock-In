@@ -1,0 +1,145 @@
+@keyframes typing {
+  0.000%,
+  3.703% {
+    content: "";
+  }
+  1.234%,
+  2.469% {
+    content: "I";
+  }
+  4.938% {
+    content: "IT";
+  }
+  6.172% {
+    content: "IT'";
+  }
+  7.407% {
+    content: "IT'S";
+  }
+  8.641% {
+    content: "IT'S ";
+  }
+  9.876% {
+    content: "IT'S T";
+  }
+  11.111% {
+    content: "IT'S TI";
+  }
+  12.346% {
+    content: "IT'S TIM";
+  }
+  13.580% {
+    content: "IT'S TIME";
+  }
+  14.815% {
+    content: "IT'S TIME ";
+  }
+  16.049% {
+    content: "IT'S TIME T";
+  }
+  17.284% {
+    content: "IT'S TIME TO";
+  }
+  18.519% {
+    content: "IT'S TIME TO ";
+  }
+  19.753% {
+    content: "IT'S TIME TO L";
+  }
+  20.988% {
+    content: "IT'S TIME TO LO";
+  }
+  22.222% {
+    content: "IT'S TIME TO LOC";
+  }
+  23.457% {
+    content: "IT'S TIME TO LOCK";
+  }
+  24.691% {
+    content: "IT'S TIME TO LOCK ";
+  }
+  25.926% {
+    content: "IT'S TIME TO LOCK I";
+  }
+  27.160%,
+  100% {
+    content: "IT'S TIME TO LOCK IN";
+  }
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.typewriter {
+  --caret: currentcolor;
+}
+
+.typewriter::before {
+  content: "";
+  animation: typing 13.5s infinite;
+}
+
+.typewriter::after {
+  content: "";
+  border-right: 1px solid var(--caret);
+  animation: blink 0.5s linear infinite;
+}
+
+.typewriter.thick::after {
+  border-right: 1ch solid var(--caret);
+}
+
+.typewriter.nocaret::after {
+  border-right: 0;
+}
+
+@media (prefers-reduced-motion) {
+  .typewriter::after {
+    animation: none;
+  }
+
+  .typewriter::before {
+    content: "IT'S TIME TO LOCK IN";
+    animation: sequencePopup 12s linear infinite;
+  }
+}
+
+/* CSS */
+.button-35 {
+  align-items: center;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: transparent 0 0 0 3px, rgba(18, 18, 18, 0.1) 0 6px 20px;
+  box-sizing: border-box;
+  color: #121212;
+  cursor: pointer;
+  display: inline-flex;
+  flex: 1 1 auto;
+  font-family: Inter, sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  justify-content: center;
+  line-height: 1;
+  margin: 0;
+  outline: none;
+  padding: 1rem 1.2rem;
+  text-align: center;
+  text-decoration: none;
+  transition: box-shadow 0.2s, -webkit-box-shadow 0.2s;
+  white-space: nowrap;
+  border: 0;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.button-35:hover {
+  box-shadow: #121212 0 0 0 3px, transparent 0 0 0 0;
+}
