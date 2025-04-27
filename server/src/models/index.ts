@@ -21,6 +21,20 @@ initStudySession(sequelize);
 User.hasMany(StudySession, { foreignKey: "userID" });
 StudySession.belongsTo(User, { foreignKey: "userID" });
 
+User.belongsToMany(User, {
+  as: "Followers",
+  through: "UserFollowers",
+  foreignKey: "followingId",
+  otherKey: "followerId",
+});
+
+User.belongsToMany(User, {
+  as: "Following",
+  through: "UserFollowers",
+  foreignKey: "followerId",
+  otherKey: "followingId",
+});
+
 const checkConnection = async () => {
   try {
     await sequelize.authenticate();
