@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -19,26 +20,54 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const formSchema = z.object({
   email: z.string().email("Invalid email address"),
 
-  password: z
-    .string()
-    .min(8, "Password must be at least 8 characters")
-    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
-    .regex(/[a-z]/, "Password must contain at least one lowercase letter")
-    .regex(/[0-9]/, "Password must contain at least one number")
-    .regex(/[@$!%*?&]/, "Password must contain at least one special character"),
+  password: z.string(),
 });
 
 export function LogInForm() {
+  const navigate = useNavigate();
+  const { setUser, user } = useAuth();
+
+  useEffect(() => {
+    if (user) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [user]);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      console.log(values);
+      const res = await fetch("http://localhost:3000/api/login", {
+        method: "POST",
+        credentials: "include", // Send the cookies with the request
+        headers: {
+          "Content-Type": "application/json", // Tell the server the data is JSON
+        },
+        body: JSON.stringify(values), // Send the username and password as JSON
+      });
+
+      const data = await res.json();
+
+      // Login success
+      if (res.ok) {
+        setUser(data.user);
+        navigate("/dashboard");
+      } else {
+        // Login failed
+        throw new Error("Login failed");
+      }
+    } catch (err) {
+      console.error("Error during login: ", err);
+    }
   }
 
   return (
@@ -98,6 +127,15 @@ export function LogInForm() {
                   <Button className="w-full" type="submit">
                     Submit
                   </Button>
+                </div>
+                <div className="mt-4 text-center text-sm">
+                  Don&apos;t have an account?{" "}
+                  <a
+                    href="#"
+                    onClick={() => navigate("/signup")}
+                    className="underline underline-offset-4">
+                    Sign up
+                  </a>
                 </div>
               </form>
             </Form>

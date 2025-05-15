@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -19,6 +21,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { useAuth } from "@/context/AuthContext";
 
 const formSchema = z.object({
   username: z
@@ -42,6 +45,15 @@ const formSchema = z.object({
 });
 
 export function SignUpForm() {
+  const navigate = useNavigate();
+  const { setUser, user } = useAuth();
+
+  useEffect(() => {
+    if (user) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [user]);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -50,8 +62,35 @@ export function SignUpForm() {
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      const res = await fetch("http://localhost:3000/api/signup", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+
+      // Check if the res is successful
+      if (!res.ok) {
+        // If the res is not successful, throw an error
+        throw new Error("Signup failed");
+      }
+
+      // Parse the JSON res
+      const data = await res.json();
+      console.log(data);
+
+      // If signup is successful, navigate to the login page or dashboard
+      if (data.message === "New user created") {
+        setUser(data);
+        navigate("/dashboard"); // Redirect to login after successful signup
+      }
+    } catch (err) {
+      console.error("Error during signup: ", err);
+    }
   }
 
   return (
@@ -128,9 +167,21 @@ export function SignUpForm() {
                       )}
                     />
                   </div>
-                  <Button className="w-full" type="submit">
-                    Submit
+                  <Button
+                    variant="default"
+                    className="w-full cursor-pointer"
+                    type="submit">
+                    Sign Up
                   </Button>
+                </div>
+                <div className="mt-4 text-center text-sm">
+                  Already have an account?{" "}
+                  <a
+                    href="#"
+                    onClick={() => navigate("/login")}
+                    className="underline underline-offset-4">
+                    Log In
+                  </a>
                 </div>
               </form>
             </Form>

@@ -3,6 +3,8 @@ import Layout from "./layouts/Layout";
 import HomePage from "./pages/HomePages";
 import { SignUpForm } from "./components/SignUpForm";
 import { LogInForm } from "./components/LogInForm";
+import Dashboard from "./pages/Dashboard";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const AppRoutes = () => {
   return (
@@ -30,6 +32,15 @@ const AppRoutes = () => {
           <Layout>
             <LogInForm></LogInForm>
           </Layout>
+        }></Route>
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Dashboard></Dashboard>
+            </Layout>
+          </ProtectedRoute>
         }></Route>
       <Route path="*" element={<Navigate to="/" />}></Route>
     </Routes>

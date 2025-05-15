@@ -1,8 +1,26 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Lock } from "lucide-react";
 import { ModeToggle } from "./ModeToggle";
+import { useAuth } from "@/context/AuthContext";
+import { Button } from "./ui/button";
 
 const Header = () => {
+  const navigate = useNavigate();
+  const { user, setUser } = useAuth();
+
+  const logout = async () => {
+    try {
+      await fetch("http://localhost:3000/api/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+      setUser(null);
+      navigate("/", { replace: true });
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
+
   return (
     <header>
       <div className="py-6 ">
@@ -13,7 +31,10 @@ const Header = () => {
             <Lock className="font-bold" />
             Lock In
           </Link>
-          <ModeToggle></ModeToggle>
+          <div className="gap-5 flex justify-between items-center">
+            <ModeToggle></ModeToggle>
+            {user && <Button onClick={() => logout()}>Logout</Button>}
+          </div>
         </nav>
       </div>
     </header>
