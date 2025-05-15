@@ -5,7 +5,6 @@ import StudySession, { initStudySession } from "./studySession";
 
 dotenv.config();
 
-// Option 1: Passing a connection URI
 const sequelize = new Sequelize({
   dialect: "postgres",
   host: process.env.DB_HOST,
@@ -46,7 +45,7 @@ const checkConnection = async () => {
 
 const syncModels = async () => {
   try {
-    await sequelize.sync({ force: true });
+    await sequelize.sync();
     console.log("All models were synchronized successfully");
   } catch (error) {
     console.error(`Unable to sync models: ${error}`);
